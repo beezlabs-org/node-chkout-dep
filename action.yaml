@@ -9,6 +9,10 @@ inputs:
     description: Node Auth token
     required: false
     default: ""
+  is-yarn:
+    description: Whether this is a yarn project
+    required: false
+    default: "false"
 runs:
   using: composite
   steps:
@@ -26,5 +30,9 @@ runs:
       env:
         NODE_AUTH_TOKEN: ${{ inputs.auth-token }}
       run: |
-        npm ci
+        if [ "${{ inputs.is-yarn }}" = "true" ]; then
+          yarn install --frozen-lockfile
+        else
+          npm ci
+        fi
       shell: bash
